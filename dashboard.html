@@ -133,81 +133,85 @@
     <button class="save-btn" id="saveBtn">Save Changes</button>
     <button class="logout-btn" id="logoutBtn">Logout</button>
   </div>
+<script>
+  // ========== Load user session ==========
+  const dbKey = "users_database";
+  const sessionKey = "current_user";
 
-  <script>
-    // Load user data from localStorage
-    const user = JSON.parse(localStorage.getItem("currentUser"));
-    const nameField = document.getElementById("nameField");
-    const emailField = document.getElementById("emailField");
-    const phoneField = document.getElementById("phoneField");
-    const locationField = document.getElementById("locationField");
-    const profilePic = document.getElementById("profilePic");
-    const uploadPic = document.getElementById("uploadPic");
-
-    // Greeting
-    const greetingText = document.getElementById("greetingText");
-    const hour = new Date().getHours();
-    const greeting =
-      hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
-    greetingText.textContent = `${greeting}, ${user?.name || "User"}!`;
-
-    // Date display
-    document.getElementById("dateDisplay").textContent =
-      new Date().toDateString();
-
-    // Display user info
-    nameField.value = user?.name || "";
-    emailField.value = user?.email || "";
-    phoneField.value = user?.phone || "";
-    locationField.value = user?.location || "";
-
-    // Profile photo
-    const savedPic = localStorage.getItem("profilePic");
-    if (savedPic) profilePic.src = savedPic;
-
-    document.getElementById("editPhoto").addEventListener("click", () => {
-      uploadPic.click();
-    });
-
-    uploadPic.addEventListener("change", (event) => {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        profilePic.src = e.target.result;
-        localStorage.setItem("profilePic", e.target.result);
-      };
-      if (file) reader.readAsDataURL(file);
-    });
-
-   // Save button (fixed)
-document.getElementById("saveBtn").addEventListener("click", () => {
-  const updatedUser = {
-    ...user,
-    name: nameField.value,
-    email: emailField.value,
-    phone: phoneField.value,
-    location: locationField.value
-  };
-
-  // Update current user
-  localStorage.setItem("currentUser", JSON.stringify(updatedUser));
-
-  // Also update user in users list
-  let users = JSON.parse(localStorage.getItem("users")) || [];
-  const index = users.findIndex(u => u.email === user.email);
-  if (index !== -1) {
-    users[index] = updatedUser;
-    localStorage.setItem("users", JSON.stringify(users));
+  const user = JSON.parse(localStorage.getItem(sessionKey));
+  if (!user) {
+    window.location.href = "login.html";
   }
 
-  alert("✅ Profile updated successfully!");
-});
+  const nameField = document.getElementById("nameField");
+  const emailField = document.getElementById("emailField");
+  const phoneField = document.getElementById("phoneField");
+  const locationField = document.getElementById("locationField");
+  const profilePic = document.getElementById("profilePic");
+  const uploadPic = document.getElementById("uploadPic");
 
-    // Logout
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      localStorage.removeItem("currentUser");
-      window.location.href = "login.html";
-    });
-  </script>
+  // ========== Greeting and Date ==========
+  const greetingText = document.getElementById("greetingText");
+  const hour = new Date().getHours();
+  const greeting =
+    hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+  greetingText.textContent = `${greeting}, ${user.name || "User"}!`;
+  document.getElementById("dateDisplay").textContent = new Date().toDateString();
+
+  // ========== Display user info ==========
+  nameField.value = user.name || "";
+  emailField.value = user.email || "";
+  phoneField.value = user.phone || "";
+  locationField.value = user.location || "";
+
+  // ========== Profile photo ==========
+  const savedPic = user.profilePic || "https://via.placeholder.com/90";
+  profilePic.src = savedPic;
+
+  document.getElementById("editPhoto").addEventListener("click", () => {
+    uploadPic.click();
+  });
+
+  uploadPic.addEventListener("change", (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      profilePic.src = e.target.result;
+      user.profilePic = e.target.result;
+      saveUserData();
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // ========== Save button ==========
+  document.getElementById("saveBtn").addEventListener("click", () => {
+    user.name = nameField.value;
+    user.email = emailField.value;
+    user.phone = phoneField.value;
+    user.location = locationField.value;
+
+    saveUserData();
+    alert("✅ Profile updated successfully!");
+  });
+
+  // ========== Save user updates to both session and database ==========
+  function saveUserData() {
+    localStorage.setItem(sessionKey, JSON.stringify(user));
+
+    let users = JSON.parse(localStorage.getItem(dbKey)) || [];
+    const index = users.findIndex((u) => u.id === user.id);
+    if (index !== -1) {
+      users[index] = user;
+      localStorage.setItem(dbKey, JSON.stringify(users));
+    }
+  }
+
+  // ========== Logout ==========
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+    localStorage.removeItem(sessionKey);
+    window.location.href = "login.html";
+  });
+</script>
 </body>
 </html>
