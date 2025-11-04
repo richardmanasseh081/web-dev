@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+     <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: #0d5f6c;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .profile-container {
+      background-color: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      width: 420px;
+      padding: 30px;
+      text-align: center;
+      position: relative;
+    }
+
+    .profile-image {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #0077b6;
+      cursor: pointer;
+    }
+
+    .edit-photo {
+      display: block;
+      color: #0077b6;
+      font-size: 14px;
+      margin-top: 8px;
+      cursor: pointer;
+    }
+
+    .user-info {
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .user-info label {
+      font-weight: 500;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .user-info input {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .save-btn {
+      background-color: #0077b6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .save-btn:hover {
+      background-color: #005f87;
+    }
+
+    .logout-btn {
+      background-color: #e63946;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .logout-btn:hover {
+      background-color: #c92a3a;
+    }
+
+    .greeting {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0077b6;
+      margin-bottom: 15px;
+    }
+
+    .date {
+      font-size: 14px;
+      color: #555;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="profile-container">
+    <div class="greeting" id="greetingText">Good day, User!</div>
+    <div class="date" id="dateDisplay"></div>
+
+    <img id="profilePic" class="profile-image" src="https://via.placeholder.com/90" alt="Profile Picture">
+    <input type="file" id="uploadPic" style="display:none;">
+    <span class="edit-photo" id="editPhoto">Change photo</span>
+
+    <div class="user-info">
+      <label>Name</label>
+      <input type="text" id="nameField">
+      <label>Email</label>
+      <input type="email" id="emailField">
+      <label>Phone</label>
+      <input type="text" id="phoneField">
+      <label>Location</label>
+      <input type="text" id="locationField" placeholder="Enter location">
+    </div>
+
+    <button class="save-btn" id="saveBtn">Save Changes</button>
+    <button class="logout-btn" id="logoutBtn">Logout</button>
+  </div>
+
+  <script>
+    // Load user data from localStorage
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+    const nameField = document.getElementById("nameField");
+    const emailField = document.getElementById("emailField");
+    const phoneField = document.getElementById("phoneField");
+    const locationField = document.getElementById("locationField");
+    const profilePic = document.getElementById("profilePic");
+    const uploadPic = document.getElementById("uploadPic");
+
+    // Greeting
+    const greetingText = document.getElementById("greetingText");
+    const hour = new Date().getHours();
+    const greeting =
+      hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+    greetingText.textContent = `${greeting}, ${user?.name || "User"}!`;
+
+    // Date display
+    document.getElementById("dateDisplay").textContent =
+      new Date().toDateString();
+
+    // Display user info
+    nameField.value = user?.name || "";
+    emailField.value = user?.email || "";
+    phoneField.value = user?.phone || "";
+    locationField.value = user?.location || "";
+
+    // Profile photo
+    const savedPic = localStorage.getItem("profilePic");
+    if (savedPic) profilePic.src = savedPic;
+
+    document.getElementById("editPhoto").addEventListener("click", () => {
+      uploadPic.click();
+    });
+
+    uploadPic.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        profilePic.src = e.target.result;
+        localStorage.setItem("profilePic", e.target.result);
+      };
+      if (file) reader.readAsDataURL(file);
+    });
+
+   // Save button (fixed)
+document.getElementById("saveBtn").addEventListener("click", () => {
+  const updatedUser = {
+    ...user,
+    name: nameField.value,
+    email: emailField.value,
+    phone: phoneField.value,
+    location: locationField.value
+  };
+
+  // Update current user
+  localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+
+  // Also update user in users list
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+  const index = users.findIndex(u => u.email === user.email);
+  if (index !== -1) {
+    users[index] = updatedUser;
+    localStorage.setItem("users", JSON.stringify(users));
+  }
+
+  alert("✅ Profile updated successfully!");
+});
+
+    // Logout
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem("currentUser");
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>

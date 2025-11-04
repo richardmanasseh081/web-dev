@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>login page</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
 <body>
-       <style>
+     <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f0f4ff;
@@ -28,7 +28,7 @@
     h2 {
       text-align: center;
       margin-bottom: 20px;
-      color: #333;
+      color: green;
     }
 
     input {
@@ -44,14 +44,14 @@
       padding: 10px;
       border: none;
       border-radius: 8px;
-      background-color: #007bff;
+      background-color: green;
       color: white;
       font-size: 16px;
       cursor: pointer;
     }
 
     button:hover {
-      background-color: #0056b3;
+      background-color: #028a02;
     }
 
     p {
@@ -60,24 +60,205 @@
     }
 
     a {
-      color: #007bff;
+      color: green;
       text-decoration: none;
     }
 
     a:hover {
       text-decoration: underline;
     }
+
+    .alert {
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 15px;
+      display: none;
+      font-size: 14px;
+    }
+
+    .alert.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      display: block;
+    }
+
+    .alert.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      display: block;
+    }
   </style>
 </head>
 <body>
   <div class="login-container">
     <h2>Login</h2>
-    <form action="#">
-      <input type="email" placeholder="Email Address" required>
-      <input type="password" placeholder="Password" required>
-      <button type="submit">Login</button>
+
+    <div id="alert" class="alert"></div>
+
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <input type="email" id="email" placeholder="Email Address" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button id="loginBtn" type="submit">Login</button>
     </form>
+
     <p>Don’t have an account? <a href="signup.html">Sign up</a></p>
   </div>
+
+  <script>
+    // ============================================
+    // BACKEND - AUTH SYSTEM
+    // ============================================
+    class UserDatabase {
+      constructor() {
+        this.storageKey = 'users_database';
+        this.sessionKey = 'current_user';
+      }
+
+      getAllUsers() {
+        const users = localStorage.getItem(this.storageKey);
+        return users ? JSON.parse(users) : [];
+      }
+
+      findUser(emailOrPhone) {
+        const users = this.getAllUsers();
+        return users.find(u =>
+          u.email === emailOrPhone.toLowerCase() ||
+          u.phone === emailOrPhone
+        );
+      }
+
+      saveSession(user) {
+        localStorage.setItem(this.sessionKey, JSON.stringify(user));
+      }
+
+      getSession() {
+        const session = localStorage.getItem(this.sessionKey);
+        return session ? JSON.parse(session) : null;
+      }
+
+      updateUser(userId, updates) {
+        const users = this.getAllUsers();
+        const index = users.findIndex(u => u.id === userId);
+        if (index !== -1) {
+          users[index] = { ...users[index], ...updates };
+          localStorage.setItem(this.storageKey, JSON.stringify(users));
+          return true;
+        }
+        return false;
+      }
+    }
+
+    class PasswordHelper {
+      static hash(password) {
+        return btoa(password + 'salt_key_xyz');
+      }
+
+      static verify(password, hashedPassword) {
+        return this.hash(password) === hashedPassword;
+      }
+    }
+
+    class AuthSystem {
+      constructor() {
+        this.db = new UserDatabase();
+      }
+
+      login(emailOrPhone, password) {
+        if (!emailOrPhone || !password) {
+          return { success: false, message: 'Please enter both email/phone and password' };
+        }
+
+        const user = this.db.findUser(emailOrPhone.trim());
+        if (!user) return { success: false, message: 'Invalid email/phone or password' };
+
+        if (!PasswordHelper.verify(password, user.password)) {
+          return { success: false, message: 'Invalid email/phone or password' };
+        }
+
+        const updatedUser = {
+          ...user,
+          lastLogin: new Date().toISOString(),
+          loginCount: (user.loginCount || 0) + 1
+        };
+
+        this.db.updateUser(user.id, updatedUser);
+
+        const session = {
+          id: updatedUser.id,
+          name: updatedUser.name,
+          email: updatedUser.email,
+          phone: updatedUser.phone,
+          loginCount: updatedUser.loginCount
+        };
+
+        this.db.saveSession(session);
+
+        return { success: true, message: 'Login successful!', user: session };
+      }
+
+      isAuthenticated() {
+        return this.db.getSession() !== null;
+      }
+
+      getCurrentUser() {
+        return this.db.getSession();
+      }
+    }
+
+    const auth = new AuthSystem();
+
+    // ============================================
+    // FRONTEND FUNCTIONS
+    // ============================================
+    function handleLogin(event) {
+      event.preventDefault();
+      hideAlert();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const loginBtn = document.getElementById('loginBtn');
+
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Logging in...';
+
+      setTimeout(() => {
+        const result = auth.login(email, password);
+
+        if (result.success) {
+          showAlert('success', result.message);
+          document.getElementById('loginForm').reset();
+
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 1500);
+        } else {
+          showAlert('error', result.message);
+          loginBtn.disabled = false;
+          loginBtn.textContent = 'Login';
+        }
+      }, 500);
+    }
+
+    function showAlert(type, message) {
+      const alert = document.getElementById('alert');
+      alert.className = 'alert ' + type;
+      alert.textContent = message;
+    }
+
+    function hideAlert() {
+      const alert = document.getElementById('alert');
+      alert.className = 'alert';
+      alert.textContent = '';
+    }
+
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('input', function() {
+        this.classList.remove('error');
+      });
+    });
+  </script>
 </body>
 </html>

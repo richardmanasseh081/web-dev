@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tshirt</title>
+</head>
+<body>
+
+    <style>
+        body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #fff;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 50px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.logo {
+  font-size: 2rem;
+}
+
+.search-bar {
+  width: 40%;
+  padding: 8px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+}
+
+.header-right {
+  display: flex;
+}
+
+/* Banner */
+.banner {
+  background-color: black;
+  color: white;
+  text-align: center;
+  padding: 80px 0;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  margin: 20px 60px;
+  color: gray;
+}
+
+/* Product Section */
+.product-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  padding: 20px 60px;
+}
+
+/* Product Card */
+.product-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  background-color: white;
+  transition: 0.3s;
+}
+
+.product-card img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.product-card h3 {
+  margin: 10px 0;
+  font-size: 1.1rem;
+  color: #222;
+}
+
+.price {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.price .new {
+  font-weight: bold;
+  color: #000;
+}
+
+.price .old {
+  text-decoration: line-through;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.discount {
+  background-color: #ffe5e5;
+  color: #c0392b;
+  padding: 3px 10px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+}
+
+button {
+  width: 100%;
+  background-color: #0a8f3c;
+  color: white;
+  border: none;
+  padding: 12px 0;
+  border-radius: 25px;
+  margin-top: 15px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: #0c7032;
+}
+  .login-btn {
+            padding: 12px 28px;
+            background-color: transparent;
+            border: 1px solid #e0e0e0;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            color: #333;
+        }
+
+        .login-btn:hover {
+            background-color: #f8f8f8;
+            border-color: #00a651;
+            color: #00a651;
+        }
+          .currency-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: 1px solid #e0e0e0;
+        }
+
+        .currency-selector:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+    
+  <!-- Header -->
+  <header class="navbar">
+   <div class="logo">
+            <img style="width: 70px; height: 70px; color: #d4d4d400;" src="../img/IMG_2739.JPEG" alt="">
+        </div>
+    <input type="text" placeholder="Search" class="search-bar">
+    <div class="nav-right">
+           <div class="header-right">
+            <div class="currency-selector">
+                <span class="currency-text">NGN</span>
+                <span class="dropdown-arrow">▼</span>
+            </div>
+            <a href="../signup.html">
+                 <button class="login-btn">Sign up</button>
+            </a>
+           <a href="">
+                 <button class="login-btn">Login</button>
+           </a>
+           <a href="../login.html">
+                 <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+           </a>
+           
+        </div>
+    </div>
+  </header>
+
+  <!-- Banner -->
+  <section class="banner">
+    <h1>Tshirt</h1>
+  </section>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="../index.html">
+         <span>🏠 / Tshirt</span>
+    </a>
+  </div>
+
+  <!-- Product Grid -->
+  <section class="product-section">
+
+    <!-- Card 1 -->
+    <div class="product-card">
+      <img src="../img/t shirt two.webp" alt="Tshirt">
+      <h3>Tshirt 2</h3>
+      <div class="price">
+        <p class="new">₦9,000</p>
+        <p class="old">₦11,000</p>
+      </div>
+      <span class="discount">Up to -18% off</span>
+      <button>Select options</button>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="product-card">
+      <img src="../img/t shirt three.webp" alt="Tshirt">
+      <h3>Tshirt 3</h3>
+      <div class="price">
+        <p class="new">₦10,500</p>
+        <p class="old">₦12,000</p>
+      </div>
+      <span class="discount">Up to -13% off</span>
+      <button>Select options</button>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="product-card">
+      <img src="../img/t shirt four.webp" alt="Tshirt">
+      <h3>Tshirt 4</h3>
+      <div class="price">
+        <p class="new">₦8,500</p>
+        <p class="old">₦10,000</p>
+      </div>
+      <span class="discount">Up to -15% off</span>
+      <button>Select options</button>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="product-card">
+      <img src="../img/t shirt one.webp" alt="Tshirt">
+      <h3>Tshirt 5</h3>
+      <div class="price">
+        <p class="new">₦7,800</p>
+        <p class="old">₦9,000</p>
+      </div>
+      <span class="discount">Up to -13% off</span>
+      <button>Select options</button>
+    </div>
+
+  </section>
+</body>
+</html>

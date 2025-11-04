@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emdeey</title>
     <link rel="stylesheet" href="./css.css">
+    <link rel="icon" href="./img/IMG_2739.JPEG">
 </head>
 <body>
     <!-- Header -->
@@ -26,6 +27,23 @@
                 <span class="currency-text">NGN</span>
                 <span class="dropdown-arrow">▼</span>
             </div>
+             <header class="navbar">
+    <div class="user-menu">
+      <div class="user-dropdown">
+        <div class="user-toggle">
+          <span class="user-icon">👤</span>
+          <span>Hi, <strong>richard</strong></span>
+          <span class="arrow">▾</span>
+        </div>
+
+        <div class="dropdown-content">
+          <a href="./dashboard.html">My Account</a>
+          <a href="#" class="signout"><span class="signout-icon">⎋</span> Sign Out</a>
+        </div>
+      </div>
+
+    </div>
+  </header>
             <a href="./signup.html">
                  <button class="login-btn">Sign up</button>
             </a>
@@ -53,9 +71,24 @@
     <!-- Navigation Tabs -->
     <nav class="nav-tabs">
         <div class="nav-tab active">All</div>
-        <div class="nav-tab">Tshirt</div>
-        <div class="nav-tab">Caps</div>
-        <div class="nav-tab">More...</div>
+        <a href="./links/tshirt.html">
+             <div class="nav-tab">Tshirt</div>
+        </a>
+       
+        <a href="./links/cap.html">
+            <div class="nav-tab">Caps</div>
+        </a>
+
+        <div class="nav-tab">
+            <div class="dropdown">
+                <button class="dropbtn">More</button>
+            <div class="dropdown-content">
+                <a href="#">Hoodie</a>
+                <a href="#">Wrist-band</a>
+                <a href="#">Mug</a>
+            </div>
+            </div>
+        </div>
     </nav>
 
      <div class="products-container">
@@ -84,7 +117,7 @@
         <div class="product-card">
             <div class="product-image" style="background: linear-gradient(135deg, #e0e0e0 0%, #f0f0f0 100%);">
                 <div style="font-size: 120px;">
-                    <img src="./img/t shirt two.webp" alt="">
+                    <img src="./img/tote bag.jpg" alt="">
                 </div>
             </div>
             <div class="product-info">
@@ -105,7 +138,7 @@
         <div class="product-card">
             <div class="product-image" style="background: linear-gradient(135deg, #f5f5f0 0%, #fefef8 100%);">
                 <div style="font-size: 120px;">
-                    <img src="./img/t shirt three.webp" alt="">
+                    <img src="./img/wrist band.jpg" alt="">
                 </div>
             </div>
             <div class="product-info">
@@ -125,7 +158,7 @@
         <div class="product-card">
             <div class="product-image" style="background: linear-gradient(135deg, #d8d8d8 0%, #ececec 100%);">
                 <div style="font-size: 120px;">
-                    <img src="./img/t shirt four.webp" alt="">
+                    <img src="./img/mug.webp" alt="">
                 </div>
             </div>
             <div class="product-info">
@@ -166,7 +199,10 @@
                 <div class="price-section">
                     <!-- No discount for this product -->
                 </div>
-                <button class="select-btn">Select options</button>
+                <a href="./cart.html">
+                    <button class="select-btn">Select options</button>
+                </a>
+                
             </div>
         </div>
 
@@ -184,7 +220,10 @@
                     <span class="original-price">₦5,500</span>
                     <span class="discount-badge">Up to -13% off</span>
                 </div>
-                <button class="select-btn">Select options</button>
+                <a href="./cart.html">
+                    <button class="select-btn">Select options</button>
+                </a>
+                
             </div>
         </div>
 
@@ -202,8 +241,12 @@
                     <span class="original-price">₦5,500</span>
                     <span class="discount-badge">Up to -13% off</span>
                 </div>
-                <button class="select-btn">Select options</button>
+                <a href="./cart.html">
+                    <button class="select-btn">Select options</button>
+                </a>    
             </div>
+              
+                
         </div>
     </div>
 
@@ -288,7 +331,7 @@
 
         // WhatsApp button
         function openWhatsApp() {
-            window.open('https://wa.me/2348012345678', '_blank');
+            window.open('https://wa.me/2347078966512', '_blank');
         }
 
 
